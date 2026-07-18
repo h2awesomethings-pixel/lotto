@@ -73,6 +73,24 @@
       transform: translateY(0);
     }
 
+    .link-btn {
+      display: inline-block;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.1);
+      color: #eee;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      transition: transform 0.1s, background 0.2s;
+    }
+
+    .link-btn:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.18);
+    }
+
     .results {
       display: flex;
       flex-direction: column;
@@ -151,6 +169,7 @@
       <option value="5" selected>5게임</option>
     </select>
     <button id="drawBtn">번호 추출</button>
+    <a class="link-btn" href="https://www.dhlottery.co.kr/" target="_blank" rel="noopener">동행복권 바로가기 🎫</a>
   </div>
 
   <div class="results" id="results"></div>
