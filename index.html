@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>로또 번호 추출기</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 16px;
+      color: #eee;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #aaa;
+      font-size: 14px;
+      margin-bottom: 32px;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    select {
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+      background: #2a2a4a;
+      color: #eee;
+      cursor: pointer;
+    }
+
+    button {
+      padding: 12px 32px;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      background: linear-gradient(135deg, #e94560 0%, #c73650 100%);
+      color: #fff;
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(233, 69, 96, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .results {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .game {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 14px 18px;
+      justify-content: center;
+    }
+
+    .game-label {
+      font-size: 14px;
+      color: #aaa;
+      width: 24px;
+      flex-shrink: 0;
+    }
+
+    .ball {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: bold;
+      color: #fff;
+      box-shadow: inset -4px -4px 8px rgba(0, 0, 0, 0.25), 0 2px 6px rgba(0, 0, 0, 0.3);
+      animation: pop 0.3s ease backwards;
+    }
+
+    @keyframes pop {
+      from {
+        transform: scale(0);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* 공식 로또 공 색상 */
+    .c1 { background: #fbc400; }  /* 1~10 노랑 */
+    .c2 { background: #69c8f2; }  /* 11~20 파랑 */
+    .c3 { background: #ff7272; }  /* 21~30 빨강 */
+    .c4 { background: #aaaaaa; }  /* 31~40 회색 */
+    .c5 { background: #b0d840; }  /* 41~45 초록 */
+
+    footer {
+      margin-top: auto;
+      padding-top: 40px;
+      font-size: 12px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎰 로또 번호 추출기</h1>
+  <p class="subtitle">1~45 중 6개의 번호를 무작위로 추출합니다</p>
+
+  <div class="controls">
+    <select id="gameCount">
+      <option value="1">1게임</option>
+      <option value="2">2게임</option>
+      <option value="3">3게임</option>
+      <option value="4">4게임</option>
+      <option value="5" selected>5게임</option>
+    </select>
+    <button id="drawBtn">번호 추출</button>
+  </div>
+
+  <div class="results" id="results"></div>
+
+  <footer>재미로만 이용하세요 🍀</footer>
+
+  <script>
+    const GAME_LABELS = ['A', 'B', 'C', 'D', 'E'];
+
+    // 1~45 중 중복 없이 6개 추출 (crypto 기반 난수 사용)
+    function drawNumbers() {
+      const pool = Array.from({ length: 45 }, (_, i) => i + 1);
+      const picked = [];
+      for (let i = 0; i < 6; i++) {
+        const rand = crypto.getRandomValues(new Uint32Array(1))[0];
+        const idx = rand % pool.length;
+        picked.push(pool.splice(idx, 1)[0]);
+      }
+      return picked.sort((a, b) => a - b);
+    }
+
+    // 번호대별 공 색상 클래스 결정
+    function colorClass(num) {
+      if (num <= 10) return 'c1';
+      if (num <= 20) return 'c2';
+      if (num <= 30) return 'c3';
+      if (num <= 40) return 'c4';
+      return 'c5';
+    }
+
+    function render() {
+      const count = Number(document.getElementById('gameCount').value);
+      const results = document.getElementById('results');
+      results.innerHTML = '';
+
+      for (let g = 0; g < count; g++) {
+        const numbers = drawNumbers();
+        const game = document.createElement('div');
+        game.className = 'game';
+
+        const label = document.createElement('span');
+        label.className = 'game-label';
+        label.textContent = GAME_LABELS[g];
+        game.appendChild(label);
+
+        numbers.forEach((num, i) => {
+          const ball = document.createElement('div');
+          ball.className = `ball ${colorClass(num)}`;
+          ball.textContent = num;
+          ball.style.animationDelay = `${(g * 6 + i) * 0.05}s`;
+          game.appendChild(ball);
+        });
+
+        results.appendChild(game);
+      }
+    }
+
+    document.getElementById('drawBtn').addEventListener('click', render);
+  </script>
+</body>
+</html>
