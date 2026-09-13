@@ -1,0 +1,27 @@
+{
+  "candidateCount": 15,
+  "gameCount": 5,
+  "maxGameOverlap": 3,
+  "weightedSampleCount": 10000,
+  "sumMean": 138,
+  "sumSigma": 35,
+  "randomFactorWeight": 0.05,
+  "numberWeights": {
+    "momentum": 0.35,
+    "gap": 0.2,
+    "longTerm": 0.15,
+    "recentBalance": 0.15,
+    "pair": 0.1
+  },
+  "combinationWeights": {
+    "number": 0.35,
+    "oddEven": 0.1,
+    "sum": 0.12,
+    "range": 0.1,
+    "consecutive": 0.08,
+    "previousOverlap": 0.08,
+    "endingDigit": 0.06,
+    "distance": 0.05,
+    "pair": 0.06
+  }
+}
