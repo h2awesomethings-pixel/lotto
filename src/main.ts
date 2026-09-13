@@ -23,12 +23,11 @@ async function initialize(): Promise<void> {
 }
 
 function bindNavigation(): void {
-  document.querySelectorAll<HTMLButtonElement>('.tab').forEach((tab) => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.tab').forEach((item) => item.classList.remove('active'));
+  document.querySelectorAll<HTMLButtonElement>('.view-link').forEach((link) => {
+    link.addEventListener('click', () => {
       document.querySelectorAll('.panel').forEach((panel) => panel.classList.add('hidden'));
-      tab.classList.add('active');
-      document.querySelector(`#${tab.dataset.panel}`)?.classList.remove('hidden');
+      document.querySelector(`#${link.dataset.panel}`)?.classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   });
 }
