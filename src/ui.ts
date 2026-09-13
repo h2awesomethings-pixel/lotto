@@ -112,8 +112,7 @@ function strategyChecks(): string {
 export function predictionTemplate(result: PredictionResult): string {
   const candidates = result.candidates.map((candidate, index) => `
     <div class="candidate"><b>${String(index + 1).padStart(2, '0')}</b>${ballTemplate(candidate.number, 'tiny')}<span>${round(candidate.score, 1)}점</span></div>`).join('');
-  return `<div class="result-header"><div><span>${strategyLabel(result.strategy)}</span><h3>${result.baseDrawNo + 1}회 추천 번호</h3></div>
-      <button id="download-prediction" class="secondary-button">JSON 저장</button></div>
+  return `<div class="result-header"><div><span>${strategyLabel(result.strategy)}</span><h3>${result.baseDrawNo + 1}회 추천 번호</h3></div></div>
     <div class="games">${result.games.map(gameTemplate).join('')}</div>
     <details><summary>후보 ${result.candidates.length}개와 점수 보기</summary><div class="candidates">${candidates}</div></details>`;
 }
@@ -126,7 +125,7 @@ function gameTemplate(game: ScoredGame, index: number): string {
 export function backtestTemplate(result: BacktestResult): string {
   const baseline = result.randomBaseline;
   return `<div class="result-header"><div><span>${result.request.startDrawNo}~${result.request.endDrawNo}회</span><h3>전략 비교 결과</h3></div>
-      <button id="download-backtest" class="secondary-button">JSON 저장</button></div>
+      <button id="download-backtest" class="secondary-button">결과 내려받기</button></div>
     <div class="baseline-card"><span>RANDOM SIMULATION × ${baseline.simulations.toLocaleString()}</span>
       <strong>${baseline.simulatedMean}<small>개</small></strong>
       <p>무작위 후보 평균 · 95% 범위 ${baseline.lower95}~${baseline.upper95}개 · 이론값 ${baseline.theoreticalMean}개</p></div>

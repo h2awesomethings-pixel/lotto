@@ -53,7 +53,6 @@ function createRecommendation(status: HTMLElement): void {
     }, config);
     element('recommend-result').innerHTML = predictionTemplate(latestPrediction);
     status.textContent = '추천 계산이 완료되었습니다.';
-    bindDownload('download-prediction', 'lotto-prediction.json', () => latestPrediction);
   } catch (error) {
     status.textContent = errorMessage(error);
   }
